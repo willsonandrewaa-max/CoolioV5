@@ -15,6 +15,7 @@
   --accent:    #ff009d;
 
   /* Turunan biru primary */
+  --navy:    #06345c;   /* navy tetap (latar gelap) */
   --sky-900: #06345c;   /* teks utama / navy */
   --sky-800: #00589a;
   --sky-700: #0074c7;
@@ -313,7 +314,7 @@ h1 { font-size: clamp(54px, 8vw, 104px); margin: 22px 0 22px; color: var(--sky-9
 .persona p { color: var(--ink-2); font-size: 14px; }
 
 /* ---------- Dark / Pasar ---------- */
-.section-dark { background: radial-gradient(120% 90% at 50% 0%, #00589a 0%, var(--sky-900) 55%, #031d36 100%); color: #fff; overflow: hidden; }
+.section-dark { background: radial-gradient(120% 90% at 50% 0%, #00589a 0%, var(--navy) 55%, #031d36 100%); color: #fff; overflow: hidden; }
 .section-dark .section-head p { color: rgba(255,255,255,.75); }
 .dark-glow { position: absolute; width: 700px; height: 700px; left: 50%; top: -300px; translate: -50% 0; background: radial-gradient(closest-side, rgba(79,181,246,.35), transparent); }
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; position: relative; }
@@ -366,7 +367,7 @@ h1 { font-size: clamp(54px, 8vw, 104px); margin: 22px 0 22px; color: var(--sky-9
 .tl-item p { color: var(--ink-2); }
 
 /* ---------- Investasi ---------- */
-.invest { display: grid; grid-template-columns: 1.1fr .9fr; gap: 40px; padding: clamp(36px, 5vw, 64px); border-radius: 36px; color: #fff; background: radial-gradient(90% 120% at 0% 0%, var(--primary) 0%, var(--sky-700) 45%, var(--sky-900) 100%); box-shadow: var(--shadow); position: relative; overflow: hidden; }
+.invest { display: grid; grid-template-columns: 1.1fr .9fr; gap: 40px; padding: clamp(36px, 5vw, 64px); border-radius: 36px; color: #fff; background: radial-gradient(90% 120% at 0% 0%, var(--primary) 0%, var(--sky-700) 45%, var(--navy) 100%); box-shadow: var(--shadow); position: relative; overflow: hidden; }
 .invest::after { content: "❄"; position: absolute; right: -40px; bottom: -90px; font-size: 360px; color: rgba(255,255,255,.06); line-height: 1; }
 .invest h2 { font-size: clamp(32px, 4vw, 50px); margin: 14px 0 18px; }
 .ask { font-size: 18px; color: rgba(255,255,255,.88); margin-bottom: 28px; }
@@ -552,7 +553,7 @@ h1 { font-size: clamp(54px, 8vw, 104px); margin: 22px 0 22px; color: var(--sky-9
 .col-val { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 6px; }
 .col-x { position: absolute; bottom: -22px; font-size: 12px; color: rgba(255,255,255,.75); }
 .tip { position: absolute; bottom: calc(var(--h) + 30px); left: 50%; translate: -50% 0; z-index: 5; width: max-content; padding: 10px 12px; border-radius: 12px; background: #fff; color: var(--ink-2); font-size: 12px; line-height: 1.5; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: opacity .2s; }
-.tip b { display: block; color: var(--sky-900); }
+.tip b { display: block; color: var(--navy); }
 .col:hover .tip, .col:focus .tip { opacity: 1; }
 .dark-source { color: var(--muted); }
 
@@ -625,7 +626,7 @@ img.ci[src*="whatsapp"] { border-radius: 50%; }
    ===================================================================== */
 .mascot { position: absolute; z-index: 3; pointer-events: none; height: auto; filter: drop-shadow(0 10px 14px rgba(0,88,154,.18)); animation: mascotBob 4.5s ease-in-out infinite; }
 @keyframes mascotBob { 50% { transform: translateY(-10px) rotate(-2deg); } }
-.say { position: absolute; z-index: 4; padding: 8px 14px; border-radius: 16px 16px 16px 4px; background: var(--yellow); color: var(--sky-900); font-family: var(--font-display); font-weight: 600; font-size: 15px; white-space: nowrap; box-shadow: var(--shadow-sm); }
+.say { position: absolute; z-index: 4; padding: 8px 14px; border-radius: 16px 16px 16px 4px; background: var(--yellow); color: var(--navy); font-family: var(--font-display); font-weight: 600; font-size: 15px; white-space: nowrap; box-shadow: var(--shadow-sm); }
 
 /* Hero: Cools memegang spray, bisa diklik untuk menyemprot */
 .mascot-hero { width: 150px; right: -10px; bottom: 34px; pointer-events: auto; cursor: pointer; animation-delay: -1s; }
@@ -655,3 +656,104 @@ img.ci[src*="whatsapp"] { border-radius: 50%; }
   .mascot-money { position: relative; display: block; margin: 0 auto; right: auto; bottom: auto; }
 }
 @media (prefers-reduced-motion: reduce) { .mascot { animation: none; } }
+
+/* =====================================================================
+   MODE RINGAN UNTUK HP (layar kecil / layar sentuh)
+   Animasi dekoratif dimatikan supaya scroll tetap mulus.
+   ===================================================================== */
+@media (max-width: 900px), (pointer: coarse) {
+  .blob { animation: none; will-change: auto; opacity: .5; }
+  .bubbles { display: none; }
+  .o1 { animation: none; }
+  .o2 { display: none; }
+  .float-chip { animation: none; box-shadow: 0 4px 12px -6px rgba(0,88,154,.3); }
+  /* maskot tetap beranimasi; bayangan filter dimatikan agar tetap ringan */
+  .mascot { filter: none; will-change: transform; }
+  .b-float, .b-shadow { animation: none; }
+  .scroll-cue span { animation: none; }
+  .card:hover, .persona:hover, .spec:hover, .channel:hover { transform: none; }
+  .card.photo:hover .card-photo img { transform: none; }
+  .logo-hero, .logo-eq, .logo-contact, .why-brand img { filter: none; }
+  .cool-blue { filter: none; }
+  .reveal { transition-duration: .5s; transform: translateY(16px); }
+  /* section di luar layar tidak digambar sampai mendekat */
+  .section:not(.hero) { content-visibility: auto; contain-intrinsic-size: auto 900px; }
+  /* foto pengganti botol 3D di section Product */
+  .bottle-photo { position: absolute; inset: 0; margin: auto; height: 100%; width: auto; max-width: 100%; object-fit: contain; border-radius: 24px; }
+}
+
+/* =====================================================================
+   MODE MALAM (data-theme="dark" pada <html>)
+   Default: mode cerah. Botol 3D tetap putih di kedua mode.
+   ===================================================================== */
+.theme-toggle { width: 42px; height: 42px; flex: none; border-radius: 50%; display: grid; place-items: center; background: var(--sky-100); color: var(--sky-800); transition: background .3s, transform .3s; }
+.theme-toggle:hover { transform: rotate(-15deg); }
+.theme-toggle svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.theme-toggle .i-sun { display: none; }
+[data-theme="dark"] .theme-toggle .i-sun { display: block; }
+[data-theme="dark"] .theme-toggle .i-moon { display: none; }
+@media (max-width: 900px) { .theme-toggle { margin-left: auto; } .nav-toggle { margin-left: 8px; } }
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --sky-900: #eaf4ff;     /* teks judul jadi terang */
+  --sky-800: #7cc6ff;
+  --sky-200: #1d4468;
+  --sky-100: #143656;
+  --sky-50:  #061a2e;     /* latar halaman */
+  --surface: #0c2640;     /* kartu */
+  --ink: #eaf4ff;
+  --ink-2: #a8c2db;
+  --muted: #7f9cb8;
+  --lime-soft: #0f3b2b;
+  --pink-soft: #3b0f2c;
+  --shadow: 0 20px 50px -20px rgba(0,0,0,.65);
+  --shadow-sm: 0 8px 24px -12px rgba(0,0,0,.6);
+}
+[data-theme="dark"] body { background: var(--sky-50); }
+[data-theme="dark"] .hero { background: linear-gradient(180deg, #041426 0%, #08223c 55%, var(--sky-50) 100%); }
+[data-theme="dark"] .blob { opacity: .22; }
+[data-theme="dark"] .section-tint { background: linear-gradient(180deg, #071d33 0%, #0a2742 100%); }
+[data-theme="dark"] .nav { background: rgba(8,30,52,.92); border-color: rgba(255,255,255,.08); }
+[data-theme="dark"] .nav.scrolled { background: rgba(8,30,52,.97); }
+[data-theme="dark"] .nav-links a:hover { background: var(--sky-100); color: #fff; }
+[data-theme="dark"] .nav-toggle span { background: #cfe7ff; }
+[data-theme="dark"] .card, [data-theme="dark"] .eq-card, [data-theme="dark"] .spec, [data-theme="dark"] .persona,
+[data-theme="dark"] .channel, [data-theme="dark"] .cogs, [data-theme="dark"] .why-card, [data-theme="dark"] .contact-chip,
+[data-theme="dark"] .card-photo, [data-theme="dark"] .tl-dot, [data-theme="dark"] .float-chip, [data-theme="dark"] .hero-pills li,
+[data-theme="dark"] .eyebrow, [data-theme="dark"] .sdg-badge, [data-theme="dark"] .btn-ghost {
+  background: var(--surface); border-color: rgba(255,255,255,.08);
+}
+[data-theme="dark"] .eq-cool { background: linear-gradient(160deg, var(--surface), #0e3354); }
+[data-theme="dark"] .eq-frag { background: linear-gradient(160deg, var(--surface), #0f3b2b); }
+[data-theme="dark"] .eq-result { background: linear-gradient(120deg, #0074c7, #00467c); }
+[data-theme="dark"] .why-item { background: #0f2d4b; border-color: rgba(255,255,255,.06); }
+[data-theme="dark"] .why-brand { background: linear-gradient(160deg, #0f2d4b, #12385c); }
+[data-theme="dark"] .ic-drop { background: #143656; }
+[data-theme="dark"] .spec-num, [data-theme="dark"] .channel > span { background: #143656; }
+[data-theme="dark"] .bar.light { background: #143656; }
+[data-theme="dark"] .persona h4, [data-theme="dark"] .card h3 { color: var(--ink); }
+[data-theme="dark"] .hl-green { color: #4fd394; }
+[data-theme="dark"] .adv { border-color: transparent; }
+[data-theme="dark"] .adv-2 { background: #143656; color: #9fd6ff; }
+[data-theme="dark"] .adv-3 { background: #0f3b2b; color: #6fe0a8; }
+[data-theme="dark"] .orbit { border-color: rgba(124,198,255,.18); }
+[data-theme="dark"] .o2 { border-color: rgba(255,255,255,.08); }
+[data-theme="dark"] .marquee { background: #0074c7; }
+[data-theme="dark"] .ms-icon { box-shadow: 0 0 0 8px var(--sky-50), 0 16px 30px -12px rgba(0,142,235,.5); }
+[data-theme="dark"] .jr-date { box-shadow: 0 0 0 6px var(--sky-50); }
+[data-theme="dark"] .footer { border-color: rgba(255,255,255,.08); }
+[data-theme="dark"] .section-dark { background: radial-gradient(120% 90% at 50% 0%, #0a3d6b 0%, #041628 60%, #020e1b 100%); }
+[data-theme="dark"] .invest { box-shadow: 0 30px 60px -30px rgba(0,142,235,.35); }
+[data-theme="dark"] .anatomy-stage::before { background: radial-gradient(closest-side, #12385c, transparent); }
+[data-theme="dark"] .mascot, [data-theme="dark"] .logo-contact, [data-theme="dark"] .logo-hero { filter: drop-shadow(0 8px 16px rgba(0,0,0,.45)); }
+/* botol tetap putih: bayangan lantai dibuat lebih lembut di latar gelap */
+[data-theme="dark"] .b-shadow { background: radial-gradient(closest-side, rgba(0,0,0,.55), rgba(0,0,0,0)); }
+[data-theme="dark"] .drag-hint { color: var(--muted); }
+/* transisi halus saat ganti mode */
+body, .nav, .card, .section-tint, .hero { transition: background-color .35s ease, color .35s ease; }
+@media (max-width: 900px), (pointer: coarse) {
+  [data-theme="dark"] .mascot, [data-theme="dark"] .logo-contact, [data-theme="dark"] .logo-hero { filter: none; }
+}
+[data-theme="dark"] .price-card { background: linear-gradient(150deg, #0a8fe6, #00467c); }
+[data-theme="dark"] .btn-white { color: #00589a; }

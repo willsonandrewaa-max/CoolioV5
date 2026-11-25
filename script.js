@@ -226,8 +226,10 @@ function drawLabelTexture(W, H, logo) {
    diskalakan. Diukur dari mockup: lebar badan 180px, tinggi 700px.
    ===================================================================== */
 // Jumlah potongan 3D: dikurangi otomatis di HP / perangkat ringan
-const LOW_END = matchMedia("(max-width: 900px)").matches || (navigator.hardwareConcurrency || 8) <= 4;
-const Q = (n) => Math.max(16, Math.round(n * (LOW_END ? 0.75 : 1) / 2) * 2);
+// Mode ringan untuk HP / layar sentuh / perangkat lemah
+const MOBILE = matchMedia("(max-width: 900px), (pointer: coarse)").matches;
+const LOW_END = MOBILE || (navigator.hardwareConcurrency || 8) <= 4;
+const Q = (n) => Math.max(14, Math.round(n * (MOBILE ? 0.5 : LOW_END ? 0.75 : 1) / 2) * 2);
 
 const GEO = {
   height: 700,
@@ -447,6 +449,8 @@ class Bottle {
       else if (Math.abs(this.vel) < 30) this.rot += CONFIG.autoRotateSpeed * dt;
     }
     this.tilt += (this.tiltTarget - this.tilt) * Math.min(1, dt * 4);
+    // di HP: gambar ulang 30x per detik saja (cukup halus, jauh lebih ringan)
+    if (MOBILE && !this.dragging && this.sprayTarget == null && (this.frame = (this.frame || 0) + 1) % 2) return;
     this.rotEl.style.transform = `rotateX(${this.tilt}deg) rotateY(${this.rot}deg)`;
     this.shade();
   }
@@ -495,7 +499,7 @@ const Mist = (() => {
   const sg = sc.createRadialGradient(32, 32, 0, 32, 32, 32);
   sg.addColorStop(0, "rgba(255,255,255,.75)"); sg.addColorStop(0.5, "rgba(255,255,255,.4)"); sg.addColorStop(1, "rgba(255,255,255,0)");
   sc.fillStyle = sg; sc.fillRect(0, 0, 64, 64);
-  const fit = () => { dpr = Math.min(2, window.devicePixelRatio || 1); cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; };
+  const fit = () => { dpr = MOBILE ? 1 : Math.min(2, window.devicePixelRatio || 1); cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; };
   fit(); addEventListener("resize", fit);
 
   let emitting = 0;
@@ -506,7 +510,7 @@ const Mist = (() => {
     const emit = () => {
       const { x, y, dir } = getPos();
       // kabut putih: campuran awan lembut + titik-titik embun halus
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < (MOBILE ? 6 : 10); i++) {
         const fine = Math.random() < 0.45;
         parts.push({
           x, y,
@@ -565,7 +569,14 @@ function redrawLabel() {
 
 function initBottles() {
   redrawLabel();
-  $$(".bottle-host").forEach((h) => new Bottle(h));
+  $$(".bottle-host").forEach((h, i) => {
+    // di HP hanya botol hero yang 3D; botol di section Product memakai foto
+    if (MOBILE && i > 0) {
+      h.innerHTML = '<img class="bottle-photo" src="assets/coolio-mockup-v2.webp" alt="Coolio 2in1 Cooling Spray bottle" loading="lazy" />';
+      return;
+    }
+    new Bottle(h);
+  });
   let last = performance.now();
   const loop = (now) => {
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
@@ -602,6 +613,23 @@ function initBottles() {
 }
 
 function initUI() {
+  // mode cerah / malam (default cerah)
+  const tt = $("#themeToggle");
+  if (tt) {
+    const sync = () => {
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      tt.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+    };
+    sync();
+    tt.addEventListener("click", () => {
+      const dark = document.documentElement.getAttribute("data-theme") !== "dark";
+      if (dark) document.documentElement.setAttribute("data-theme", "dark");
+      else document.documentElement.removeAttribute("data-theme");
+      try { localStorage.setItem("coolio-theme", dark ? "dark" : "light"); } catch (e) {}
+      sync();
+    });
+  }
+
   // navbar
   const nav = $("#nav");
   addEventListener("scroll", () => nav.classList.toggle("scrolled", scrollY > 30), { passive: true });
@@ -611,7 +639,7 @@ function initUI() {
   // gelembung naik di hero
   const bub = $("#bubbles");
   const R = rng(11);
-  for (let i = 0; i < (LOW_END ? 6 : 10); i++) {
+  for (let i = 0; i < (MOBILE ? 0 : LOW_END ? 6 : 10); i++) {
     const s = document.createElement("span");
     const size = 10 + R() * 46;
     Object.assign(s.style, { left: R() * 100 + "%", width: size + "px", height: size + "px", animationDuration: 12 + R() * 16 + "s", animationDelay: -R() * 20 + "s" });
